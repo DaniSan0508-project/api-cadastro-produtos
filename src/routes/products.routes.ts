@@ -9,16 +9,23 @@ productsRoutes.get('/', async (request: Request, response: Response) => {
 });
 
 productsRoutes.post('/insert', async (request: Request, response: Response) => {
+  interface Product {
+    name: string;
+    price: number;
+  }
+
   const { name, price } = request.body;
 
-  const product = {
+  const product: Product = {
     name,
     price,
   };
 
   const newProducts = await knex('products').insert(product);
 
-  return response.json(newProducts[0]);
+  return response.json({
+    msg: 'item criado com sucesso com id' + newProducts[0],
+  });
 });
 
 export default productsRoutes;
