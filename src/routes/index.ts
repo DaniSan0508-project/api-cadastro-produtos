@@ -1,9 +1,8 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import productsRouter from './products.routes';
 
 const routes = Router();
 
-routes.get('/', (request: Request, response: Response) => {
-  return response.json({ message: 'primeira rota' });
-});
+routes.use('/products', productsRouter);
 
 export default routes;
