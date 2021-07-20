@@ -5,6 +5,7 @@ export async function up(knex: Knex) {
     table.increments('id').primary();
     table.string('name').notNullable();
     table.decimal('price').notNullable();
+    table.double('quantities').notNullable();
   });
 }
 
