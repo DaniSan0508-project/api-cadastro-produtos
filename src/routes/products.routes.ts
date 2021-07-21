@@ -1,4 +1,4 @@
-import { Router, Request, Response, request, response } from 'express';
+import { Router, Request, Response } from 'express';
 import knex from '../database/connection';
 
 const productsRoutes = Router();
@@ -11,6 +11,17 @@ interface Product {
 
 productsRoutes.get('/', async (request: Request, response: Response) => {
   const products = await knex('products').select('*');
+  return response.json(products);
+});
+
+productsRoutes.get('/:id', async (request: Request, response: Response) => {
+  const { id } = request.params;
+
+  const products = await knex('products').select('*').where('id', id);
+
+  if (products.length == 0) {
+    return response.status(400).json({ msg: 'User not found' }).status(400);
+  }
   return response.json(products);
 });
 
