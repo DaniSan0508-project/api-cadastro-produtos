@@ -69,4 +69,9 @@ productsRoutes.put('/:id', async (request: Request, response: Response) => {
   return response.json(product);
 });
 
+productsRoutes.delete('/:id', async (request: Request, response: Response) => {
+  const { id } = request.params;
+  await knex('products').delete('*').where('id', id);
+  return response.json({ msg: 'deleted product' });
+});
 export default productsRoutes;
