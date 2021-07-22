@@ -34,10 +34,17 @@ productsRoutes.post('/', async (request: Request, response: Response) => {
     quantities,
   };
 
+  const existProduct = await knex('products')
+    .select('*')
+    .where('name', name.toUpperCase());
+
+  if (existProduct.length > 0) {
+    return response.json({ msg: 'product already registered' });
+  }
   const newProducts = await knex('products').insert(product);
 
   return response.json({
-    msg: 'created item ' + newProducts[0],
+    msg: 'created item ',
   });
 });
 
