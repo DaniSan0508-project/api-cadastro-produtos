@@ -29,15 +29,15 @@ productsRoutes.post('/', async (request: Request, response: Response) => {
   const { name, price, quantities } = request.body;
 
   const product: Product = {
-    name,
-    price,
+    name: name.toUpperCase(),
+    price: price.toFixed(2).replace('.', ','),
     quantities,
   };
 
   const newProducts = await knex('products').insert(product);
 
   return response.json({
-    msg: 'item criado com sucesso com id ' + newProducts[0],
+    msg: 'created item ' + newProducts[0],
   });
 });
 
@@ -47,8 +47,8 @@ productsRoutes.put('/:id', async (request: Request, response: Response) => {
   const { name, price, quantities } = request.body;
 
   const product: Product = {
-    name,
-    price,
+    name: name.toUpperCase(),
+    price: price.toFixed(2).replace('.', ','),
     quantities,
   };
 
