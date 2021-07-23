@@ -20,7 +20,7 @@ productsRoutes.get('/:id', async (request: Request, response: Response) => {
   const products = await knex('products').select('*').where('id', id);
 
   if (products.length == 0) {
-    return response.status(400).json({ msg: 'User not found' }).status(400);
+    return response.status(400).json({ msg: 'Product not found' }).status(400);
   }
   return response.json(products);
 });
@@ -39,7 +39,7 @@ productsRoutes.post('/', async (request: Request, response: Response) => {
     .where('name', name.toUpperCase());
 
   if (existProduct.length > 0) {
-    return response.json({ msg: 'product already registered' });
+    return response.status(406).json({ msg: 'product already registered' });
   }
   const newProducts = await knex('products').insert(product);
 
@@ -70,7 +70,7 @@ productsRoutes.put('/:id', async (request: Request, response: Response) => {
   });
 
   if (newProduct == 0) {
-    return response.json({ msg: 'id doesnt exist' });
+    return response.status(400).json({ msg: 'id doesnt exist' });
   }
 
   return response.json(product);
@@ -78,7 +78,11 @@ productsRoutes.put('/:id', async (request: Request, response: Response) => {
 
 productsRoutes.delete('/:id', async (request: Request, response: Response) => {
   const { id } = request.params;
-  await knex('products').delete('*').where('id', id);
+  const deletedProduct = await knex('products').delete('*').where('id', id);
+  if (!deletedProduct) {
+    return response.status(404).json({ msg: 'product not found' });
+  }
   return response.json({ msg: 'deleted product' });
 });
+
 export default productsRoutes;
